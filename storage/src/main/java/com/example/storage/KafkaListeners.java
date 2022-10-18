@@ -18,16 +18,15 @@ public class KafkaListeners {
     private ItemService itemService;
 
     @KafkaListener(topics = "json", groupId = "uniqueGroup", containerFactory = "itemListener")
-    void listener(JsonNode data) {
+    void listener(String data) {
         ObjectMapper mapper = new ObjectMapper();
         Item received = null;
         try {
-            received = mapper.readValue(mapper.writeValueAsString(data), Item.class);
+            received = mapper.readValue(data, Item.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
         System.out.println("Data received From JSON_CONVERTER: " + received);
-        System.out.println(data);
         itemService.saveItem(received);
     }
 }
