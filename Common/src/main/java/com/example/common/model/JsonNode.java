@@ -1,7 +1,7 @@
-package com.example.common;
+package com.example.common.model;
 
 
-public class Item {
+public class JsonNode {
 
     private long id;
 
@@ -23,10 +23,10 @@ public class Item {
 
     private double percentage;
 
-    public Item() {
+    public JsonNode() {
     }
 
-    public Item(long id, String name, String owner, int capacity, double amount, double total, double profit, String reference, String exportTo, double percentage) {
+    public JsonNode(long id, String name, String owner, int capacity, double amount, double total, double profit, String reference, String exportTo, double percentage) {
         this.id = id;
         this.name = name;
         this.owner = owner;
