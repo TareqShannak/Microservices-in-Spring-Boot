@@ -12,4 +12,9 @@ public class KafkaTopicConfig {
     public NewTopic tareqTopic() {
         return TopicBuilder.name("logs").build();
     }
+
+    @Bean
+    public NewTopic dataTopic() {
+        return TopicBuilder.name("import-data").build();
+    }
 }

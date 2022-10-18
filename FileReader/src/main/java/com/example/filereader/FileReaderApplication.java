@@ -23,20 +23,20 @@ public class FileReaderApplication {
         SpringApplication.run(FileReaderApplication.class, args);
     }
 
-    @Bean
-    CommandLineRunner commandLineRunner() {
-        return args -> {
-            String csvFile = "C:\\Users\\TareqS\\Desktop\\Sample1.csv";
-            ArrayList<String> events = csvReader.read(csvFile);
-
-            for (String event : events) {
-                System.out.println("Data Send From FILE_READER: " + event);
-                kafkaTemplate.send("logs", event);
-            }
-
-
-        };
-    }
+//    @Bean
+//    CommandLineRunner commandLineRunner() {
+//        return args -> {
+//            String csvFile = "C:\\Users\\TareqS\\Desktop\\Sample1.csv";
+//            ArrayList<String> events = csvReader.read(csvFile);
+//
+//            for (String event : events) {
+//                System.out.println("Data Send From FILE_READER: " + event);
+//                kafkaTemplate.send("logs", event);
+//            }
+//
+//
+//        };
+//    }
 
 
 }
