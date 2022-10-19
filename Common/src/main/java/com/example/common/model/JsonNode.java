@@ -3,8 +3,6 @@ package com.example.common.model;
 
 public class JsonNode {
 
-    private long id;
-
     private String name;
 
     private String owner;
@@ -26,8 +24,7 @@ public class JsonNode {
     public JsonNode() {
     }
 
-    public JsonNode(long id, String name, String owner, int capacity, double amount, double total, double profit, String reference, String exportTo, double percentage) {
-        this.id = id;
+    public JsonNode(String name, String owner, int capacity, double amount, double total, double profit, String reference, String exportTo, double percentage) {
         this.name = name;
         this.owner = owner;
         this.capacity = capacity;
@@ -39,13 +36,6 @@ public class JsonNode {
         this.percentage = percentage;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -122,8 +112,7 @@ public class JsonNode {
     @Override
     public String toString() {
         return "Item{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", owner='" + owner + '\'' +
                 ", capacity=" + capacity +
                 ", amount=" + amount +

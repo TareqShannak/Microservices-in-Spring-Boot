@@ -34,9 +34,9 @@ public class KafkaListeners {
 
     void convert(String data) throws JSONException {
         attributes = data.split(",");
-        jsonNode = new JsonNode(Long.parseLong(attributes[0]), attributes[1], attributes[2], Integer.parseInt(attributes[3]),
-                Double.parseDouble(attributes[4]), Double.parseDouble(attributes[5]), Double.parseDouble(attributes[6]),
-                attributes[7], attributes[8], Double.parseDouble(attributes[9]));
+        jsonNode = new JsonNode(attributes[0], attributes[1], Integer.parseInt(attributes[2]),
+                Double.parseDouble(attributes[3]), Double.parseDouble(attributes[4]), Double.parseDouble(attributes[5]),
+                attributes[6], attributes[7], Double.parseDouble(attributes[8]));
     }
 }
 
