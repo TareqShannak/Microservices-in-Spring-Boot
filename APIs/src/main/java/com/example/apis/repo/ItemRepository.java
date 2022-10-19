@@ -9,5 +9,15 @@ import java.util.List;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
+    public List<Item> findByOrderById();
+
     public List<Item> findByCapacity(int capacity);
+
+    public List<Item> findByCapacityGreaterThanEqual(int capacity);
+
+    public List<Item> findByExportToContainsIgnoreCase(String exportTo);
+
+    public List<Item> findByNameContainsIgnoreCase(String name);
+
+    public List<Item> findByPercentageBetweenOrderByPercentage(double min, double max);
 }

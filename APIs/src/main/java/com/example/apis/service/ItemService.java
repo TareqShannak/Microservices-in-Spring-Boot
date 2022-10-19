@@ -18,7 +18,7 @@ public class ItemService {
     }
 
     public List<Item> allItems(){
-        return itemRepository.findAll();
+        return itemRepository.findByOrderById();
     }
 
     public Item getById(Long id){
@@ -27,6 +27,21 @@ public class ItemService {
 
     public List<Item> getByCapacity(int capacity){
         return itemRepository.findByCapacity(capacity);
+    }
+    public List<Item> getByCapacityGreaterThanEqual(int capacity){
+        return itemRepository.findByCapacityGreaterThanEqual(capacity);
+    }
+
+    public List<Item> getByExportToContains(String exportTo){
+        return itemRepository.findByExportToContainsIgnoreCase(exportTo);
+    }
+
+    public List<Item> getByNameContains(String name){
+        return itemRepository.findByNameContainsIgnoreCase(name);
+    }
+
+    public List<Item> getByPercentageBetween(double min, double max){
+        return itemRepository.findByPercentageBetweenOrderByPercentage(min, max);
     }
 
 }
