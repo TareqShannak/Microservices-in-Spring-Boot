@@ -4,11 +4,14 @@ public class DataFile {
 
     private String path;
 
+    private int formId;
+
     public DataFile() {
     }
 
-    public DataFile(String path) {
+    public DataFile(String path, int formId) {
         this.path = path;
+        this.formId = formId;
     }
 
     public String getPath() {
@@ -17,5 +20,13 @@ public class DataFile {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public int getFormId() {
+        return formId;
+    }
+
+    public void setFormId(int formId) {
+        this.formId = formId;
     }
 }

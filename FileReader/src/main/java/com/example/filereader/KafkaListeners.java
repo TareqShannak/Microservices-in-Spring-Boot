@@ -34,7 +34,7 @@ public class KafkaListeners {
 
             for (String event : events) {
                 System.out.println("Data Send From FILE_READER: " + event);
-                kafkaTemplate.send("logs", event);
+                kafkaTemplate.send("logs", dataFile.getFormId() + "," + event);
             }
 
             Thread.sleep(30_000);
