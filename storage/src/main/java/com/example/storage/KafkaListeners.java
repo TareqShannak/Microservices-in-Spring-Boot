@@ -1,7 +1,9 @@
 package com.example.storage;
 
 import com.example.storage.model.FirstItem;
+import com.example.storage.model.FirstItemAttributes;
 import com.example.storage.model.SecondItem;
+import com.example.storage.model.SecondItemAttributes;
 import com.example.storage.service.SecondItemService;
 import com.example.storage.service.FirstItemService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -35,17 +37,13 @@ public class KafkaListeners {
             int formId = object.getInt("0");
             object.remove("0");
             ObjectMapper mapper = new ObjectMapper();
-            if (formId == 1) {
-                Map<String, String> properties = new HashMap<>() {{
-                    put("loginEmail", object.getString("1"));
-                    put("id", object.getString("2"));
-                    put("oneTimePassword", object.getString("3"));
-                    put("recoveryCode", object.getString("4"));
-                    put("firstName", object.getString("5"));
-                    put("lastName", object.getString("6"));
-                    put("department", object.getString("7"));
-                    put("location", object.getString("8"));
+            Map<String, String> properties;
 
+            if (formId == 1) {
+                properties = new HashMap<>() {{
+                    for (FirstItemAttributes value : FirstItemAttributes.values()) {
+                        put(value.toString(), object.getString(String.valueOf(value.ordinal() + 1)));
+                    }
                 }};
 
                 object = new JSONObject(properties);
@@ -53,25 +51,17 @@ public class KafkaListeners {
                 System.out.println("Data received Item1 From JSON_CONVERTER: " + firstItem);
                 firstItemService.saveItem(firstItem);
             } else {
-                Map<String, String> properties = new HashMap<>() {{
-                    put("username", object.getString("1"));
-                    put("id", object.getString("2"));
-                    put("accessCode", object.getString("3"));
-                    put("recoveryCode", object.getString("4"));
-                    put("firstName", object.getString("5"));
-                    put("lastName", object.getString("6"));
-                    put("department", object.getString("7"));
-                    put("location", object.getString("8"));
-
+                properties = new HashMap<>() {{
+                    for (SecondItemAttributes value : SecondItemAttributes.values()) {
+                        put(value.toString(), object.getString(String.valueOf(value.ordinal() + 1)));
+                    }
                 }};
 
                 object = new JSONObject(properties);
-
                 SecondItem secondItem = mapper.readValue(object.toString(), SecondItem.class);
                 System.out.println("Data received Item2 From JSON_CONVERTER: " + secondItem);
                 secondItemService.saveItem(secondItem);
             }
-
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         } catch (JSONException e) {
