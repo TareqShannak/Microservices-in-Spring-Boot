@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Controller;
 
 @SpringBootApplication
-//@EnableJpaRepositories
-//@ComponentScan("com.example.common.model")
 @Controller
 public class StorageApplication {
 

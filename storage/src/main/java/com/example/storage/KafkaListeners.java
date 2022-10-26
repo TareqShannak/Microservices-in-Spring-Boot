@@ -1,31 +1,22 @@
 package com.example.storage;
 
-import com.example.storage.model.FirstItem;
-import com.example.storage.model.FirstItemAttributes;
-import com.example.storage.model.SecondItem;
-import com.example.storage.model.SecondItemAttributes;
-import com.example.storage.service.SecondItemService;
-import com.example.storage.service.FirstItemService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.storage.model.*;
+import com.example.storage.service.ObjectService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Component
 public class KafkaListeners {
 
     @Autowired
-    private FirstItemService firstItemService;
-
-    @Autowired
-    private SecondItemService secondItemService;
+    private ObjectService objectService;
 
     JSONObject object;
 
@@ -34,36 +25,37 @@ public class KafkaListeners {
         try {
             object = new JSONObject(data);
             System.out.println("Data received From JSON_CONVERTER: " + object);
+
             int formId = object.getInt("0");
-            object.remove("0");
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, String> properties;
 
-            if (formId == 1) {
-                properties = new HashMap<>() {{
-                    for (FirstItemAttributes value : FirstItemAttributes.values()) {
-                        put(value.toString(), object.getString(String.valueOf(value.ordinal() + 1)));
+            List<Attribute> attributes = new ArrayList<>() {
+                {
+                    List<String> itemAttributes = objectService.getItemAttributes(formId);
+                    for (String itemAttribute : itemAttributes) {
+                        if (itemAttribute.equals("id"))
+                            continue;
+                        add(new Attribute(itemAttribute, object.getString(String.valueOf(itemAttributes.indexOf(itemAttribute)))));
                     }
-                }};
 
-                object = new JSONObject(properties);
-                FirstItem firstItem = mapper.readValue(object.toString(), FirstItem.class);
-                System.out.println("Data received Item1 From JSON_CONVERTER: " + firstItem);
-                firstItemService.saveItem(firstItem);
-            } else {
-                properties = new HashMap<>() {{
-                    for (SecondItemAttributes value : SecondItemAttributes.values()) {
-                        put(value.toString(), object.getString(String.valueOf(value.ordinal() + 1)));
-                    }
-                }};
+//                    for (FirstItemAttributes value : FirstItemAttributes.values())
+//                        add(new Attribute(value.toString(), object.getString(String.valueOf(value.ordinal() + 1))));
+                }
+            };
+            KafkaEvent event = new KafkaEvent(formId, attributes);
 
-                object = new JSONObject(properties);
-                SecondItem secondItem = mapper.readValue(object.toString(), SecondItem.class);
-                System.out.println("Data received Item2 From JSON_CONVERTER: " + secondItem);
-                secondItemService.saveItem(secondItem);
+            String columns = "";
+            String values = "";
+            for (Attribute attribute : event.getAttributes()) {
+                columns = columns.concat(attribute.getName() + ", ");
+                values = values.concat(attribute.getName().equals("id") ? attribute.getValue() + ", " : "'" + attribute.getValue() + "', ");
             }
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+
+            //Reformat the columns and values to insert in the query
+            columns = columns.trim().substring(0, columns.trim().length() - 1);
+            values = values.trim().substring(0, values.trim().length() - 1);
+
+            objectService.saveItem(event.getFormId(), columns, values);
+
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
