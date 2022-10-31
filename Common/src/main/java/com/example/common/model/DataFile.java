@@ -29,4 +29,12 @@ public class DataFile {
     public void setFormId(int formId) {
         this.formId = formId;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"path\":\"" + path + '\"' +
+                ", \"formId\":" + formId +
+                '}';
+    }
 }

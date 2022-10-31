@@ -25,15 +25,15 @@ public class KafkaListeners {
         System.out.println("Data received From FILE_READER: " + data);
         convert(data);
         ObjectMapper mapper = new ObjectMapper();
-            String json = object.toString();
-            System.out.println("Data converted to JSON and Send From JSON_CONVERTER: " + json);
-            kafkaTemplate.send("json", json);
+        String json = object.toString();
+        System.out.println("Data converted to JSON and Send From JSON_CONVERTER: " + json);
+        kafkaTemplate.send("json", json);
 
     }
 
     void convert(String data) throws JSONException {
         attributes = data.split(",");
-        Map<String, String> map= new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         int count = 0;
         for (String attribute : attributes) {
             map.put(String.valueOf(count++), attribute);

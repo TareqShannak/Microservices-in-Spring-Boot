@@ -24,9 +24,8 @@ public class KafkaConsumerConfig {
         HashMap<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, boostrapServers);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,  StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 //        props.put(JsonDeserializer.TYPE_MAPPINGS, "Item:com.example.common.model.JsonNode");
-
         return props;
     }
 
@@ -36,9 +35,7 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> itemListener(
-            ConsumerFactory<String, String> consumerFactory
-    ) {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> itemListener(ConsumerFactory<String, String> consumerFactory) {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
         return factory;

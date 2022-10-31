@@ -19,7 +19,7 @@ public class KafkaListeners {
     DataFile dataFile;
 
     @Autowired
-    private CSVReader csvReader;
+    private FileReader fileReader;
 
     ObjectMapper mapper = new ObjectMapper();
 
@@ -28,19 +28,16 @@ public class KafkaListeners {
         try {
             dataFile = mapper.readValue(data, DataFile.class);
 
-//            String csvFile = "C:\\Users\\TareqS\\Desktop\\Sample1.csv";
             String csvFile = dataFile.getPath();
-            ArrayList<String> events = csvReader.read(csvFile);
+            ArrayList<String> events = fileReader.read(csvFile);
 
             for (String event : events) {
                 System.out.println("Data Send From FILE_READER: " + event);
                 kafkaTemplate.send("logs", dataFile.getFormId() + "," + event);
             }
 
-            Thread.sleep(30_000);
+            //Thread.sleep(30_000);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

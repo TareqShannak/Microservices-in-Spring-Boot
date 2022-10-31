@@ -36,9 +36,6 @@ public class KafkaListeners {
                             continue;
                         add(new Attribute(itemAttribute, object.getString(String.valueOf(itemAttributes.indexOf(itemAttribute)))));
                     }
-
-//                    for (FirstItemAttributes value : FirstItemAttributes.values())
-//                        add(new Attribute(value.toString(), object.getString(String.valueOf(value.ordinal() + 1))));
                 }
             };
             KafkaEvent event = new KafkaEvent(formId, attributes);
@@ -55,7 +52,6 @@ public class KafkaListeners {
             values = values.trim().substring(0, values.trim().length() - 1);
 
             objectService.saveItem(event.getFormId(), columns, values);
-
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
