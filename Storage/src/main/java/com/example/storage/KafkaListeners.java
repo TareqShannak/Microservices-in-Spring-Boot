@@ -1,7 +1,10 @@
 package com.example.storage;
 
-import com.example.storage.model.*;
+import com.example.common.model.Attribute;
+import com.example.common.model.KafkaEvent;
 import com.example.storage.service.ObjectService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,42 +21,38 @@ public class KafkaListeners {
     @Autowired
     private ObjectService objectService;
 
-    JSONObject object;
+    KafkaEvent kafkaEvent;
 
     @KafkaListener(topics = "json", groupId = "uniqueGroup", containerFactory = "itemListener")
-    void listener(String data) {
-        try {
-            object = new JSONObject(data);
-            System.out.println("Data received From JSON_CONVERTER: " + object);
+    void listener(String data) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        kafkaEvent = mapper.readValue(data, KafkaEvent.class);
+        System.out.println("JSON_CONVERTER ==> STORAGE: " + kafkaEvent);
 
-            int formId = object.getInt("0");
-
-            List<Attribute> attributes = new ArrayList<>() {
-                {
-                    List<String> itemAttributes = objectService.getItemAttributes(formId);
-                    for (String itemAttribute : itemAttributes) {
-                        if (itemAttribute.equals("id"))
-                            continue;
-                        add(new Attribute(itemAttribute, object.getString(String.valueOf(itemAttributes.indexOf(itemAttribute)))));
-                    }
+        List<Attribute> attributesWithNamedKeys = new ArrayList<>() {
+            {
+                List<String> itemAttributes = objectService.getItemAttributes(kafkaEvent.getFormId());
+                int count = 0;
+                for (String itemAttribute : itemAttributes) {
+                    if (itemAttribute.equals("id")) continue;
+                    add(new Attribute(itemAttribute, kafkaEvent.getAttributes().get(count++).getValue()));
                 }
-            };
-            KafkaEvent event = new KafkaEvent(formId, attributes);
-
-            String columns = "";
-            String values = "";
-            for (Attribute attribute : event.getAttributes()) {
-                columns = columns.concat(attribute.getName() + ", ");
-                values = values.concat(attribute.getName().equals("id") ? attribute.getValue() + ", " : "'" + attribute.getValue() + "', ");
             }
+        };
 
-            //Reformat the columns and values to insert in the query
-            columns = columns.trim().substring(0, columns.trim().length() - 1);
-            values = values.trim().substring(0, values.trim().length() - 1);
+        kafkaEvent.setAttributes(attributesWithNamedKeys);
 
-            objectService.saveItem(event.getFormId(), columns, values);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
+        String columns = "";
+        String values = "";
+        for (Attribute attribute : kafkaEvent.getAttributes()) {
+            columns = columns.concat(attribute.getName() + ", ");
+            values = values.concat(attribute.getName().equals("id") ? attribute.getValue() + ", " : "'" + attribute.getValue() + "', ");
         }
+
+        //Reformat the columns and values to insert in the query
+        columns = columns.trim().substring(0, columns.trim().length() - 1);
+        values = values.trim().substring(0, values.trim().length() - 1);
+
+        objectService.saveItem(kafkaEvent.getFormId(), columns, values);
     }
 }

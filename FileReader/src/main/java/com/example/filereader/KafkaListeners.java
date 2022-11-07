@@ -1,6 +1,7 @@
 package com.example.filereader;
 
 import com.example.common.model.DataFile;
+import com.example.common.model.DataLine;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +27,16 @@ public class KafkaListeners {
     @KafkaListener(topics = "import-data", groupId = "uniqueGroup")
     void listener(String data) {
         try {
+            System.out.println("DATA_DETECTOR ==> FILE_READER: " + data);
             dataFile = mapper.readValue(data, DataFile.class);
 
             String csvFile = dataFile.getPath();
-            ArrayList<String> events = fileReader.read(csvFile);
+            ArrayList<String> dataLines = fileReader.read(csvFile);
 
-            for (String event : events) {
-                System.out.println("Data Send From FILE_READER: " + event);
-                kafkaTemplate.send("logs", dataFile.getFormId() + "," + event);
+            for (String line : dataLines) {
+                DataLine dataLine = new DataLine(dataFile.getFormId(), line);
+                System.out.println("FILE_READER ==> JSON_CONVERTER: " + dataLine);
+                kafkaTemplate.send("logs", dataLine.toString());
             }
 
             //Thread.sleep(30_000);

@@ -1,4 +1,4 @@
-package com.example.storage.model;
+package com.example.common.model;
 
 
 public class Attribute {
@@ -33,9 +33,9 @@ public class Attribute {
 
     @Override
     public String toString() {
-        return "Attribute{" +
-                "name='" + name + '\'' +
-                ", value='" + value + '\'' +
+        return "{" +
+                "\"name\":\"" + name + '\"' +
+                ", \"value\":\"" + value + '\"' +
                 '}';
     }
 }

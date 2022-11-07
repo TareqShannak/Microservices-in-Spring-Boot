@@ -1,4 +1,11 @@
-package com.example.storage.model;
+package com.example.common.model;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.deser.std.StringDeserializer;
+import com.fasterxml.jackson.databind.ser.std.StringSerializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -6,7 +13,8 @@ import java.util.List;
 public class KafkaEvent {
 
     private int formId;
-
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime creationTime;
 
     private List<Attribute> attributes;
@@ -33,7 +41,7 @@ public class KafkaEvent {
     }
 
     public void setCreationTime(LocalDateTime creationTime) {
-        this.creationTime = creationTime;
+        this.creationTime = LocalDateTime.now();
     }
 
     public List<Attribute> getAttributes() {
@@ -46,10 +54,10 @@ public class KafkaEvent {
 
     @Override
     public String toString() {
-        return "KafkaEvent{" +
-                "formId=" + formId +
-                ", creationTime=" + creationTime +
-                ", attributes=" + attributes +
+        return "{" +
+                "\"formId\":" + formId +
+                ", \"creationTime\":\"" + creationTime +
+                "\", \"attributes\":" + attributes +
                 '}';
     }
 }

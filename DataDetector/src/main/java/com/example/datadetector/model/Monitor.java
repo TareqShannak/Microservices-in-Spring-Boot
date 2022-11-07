@@ -1,8 +1,9 @@
 package com.example.datadetector.model;
 
 import com.example.common.model.DataFile;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Component;
+import com.example.datadetector.KafkaListeners;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -13,10 +14,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Component
+@Document
 public class Monitor implements Runnable {
 
-    private int id;
+    @Id
+    private String id;
+
+    private int formId;
 
     private String[] namingPolicy;
 
@@ -26,33 +30,34 @@ public class Monitor implements Runnable {
 
     private Timestamp startTime;
 
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private List<IntegrationMapping> integrationMappings;
 
     public Monitor() {
     }
 
-    public Monitor(int id, String[] namingPolicy, String folderPath, double checkTimeInMinutes, Timestamp startTime) {
-        this.id = id;
+    public Monitor(int formId, String[] namingPolicy, String folderPath, double checkTimeInMinutes, Timestamp startTime, List<IntegrationMapping> integrationMappings) {
+        this.formId = formId;
         this.namingPolicy = namingPolicy;
         this.folderPath = folderPath;
         this.checkTimeInMinutes = checkTimeInMinutes;
         this.startTime = startTime;
+        this.integrationMappings = integrationMappings;
     }
 
-    public KafkaTemplate<String, String> getKafkaTemplate() {
-        return kafkaTemplate;
-    }
-
-    public void setKafkaTemplate(KafkaTemplate<String, String> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
-    }
-
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public int getFormId() {
+        return formId;
+    }
+
+    public void setFormId(int formId) {
+        this.formId = formId;
     }
 
     public String[] getNamingPolicy() {
@@ -87,9 +92,17 @@ public class Monitor implements Runnable {
         this.startTime = new Timestamp(System.currentTimeMillis());
     }
 
+    public List<IntegrationMapping> getIntegrationMappings() {
+        return integrationMappings;
+    }
+
+    public void setIntegrationMappings(List<IntegrationMapping> integrationMappings) {
+        this.integrationMappings = integrationMappings;
+    }
+
     @Override
     public String toString() {
-        return "Monitor{" + "id=" + id + ", namingPolicy=" + Arrays.toString(namingPolicy) + ", folderPath='" + folderPath + '\'' + ", checkTimeInMinutes=" + checkTimeInMinutes + ", startTime=" + startTime + '}';
+        return "Monitor{" + "id=" + formId + ", namingPolicy=" + Arrays.toString(namingPolicy) + ", folderPath='" + folderPath + '\'' + ", checkTimeInMinutes=" + checkTimeInMinutes + ", startTime=" + startTime + '}';
     }
 
 
@@ -102,7 +115,7 @@ public class Monitor implements Runnable {
                     for (String s : this.getNamingPolicy())
                         if (newFile.getName().matches(s)) {
                             System.out.println("New File!");
-                            kafkaTemplate.send("import-data", new DataFile(this.getFolderPath().replaceAll("\\\\", "\\\\\\\\") + "\\\\" + newFile.getName(), this.getId()).toString());
+                            KafkaListeners.kafkaTemplate.send("import-data", new DataFile(this.getFolderPath().replaceAll("\\\\", "\\\\\\\\") + "\\\\" + newFile.getName(), this.getFormId()).toString());
                             break;
                         }
                 }
