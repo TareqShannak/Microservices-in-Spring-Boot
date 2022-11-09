@@ -2,24 +2,24 @@ package com.example.common.model;
 
 public class DataLine {
 
-    private int formId;
+    private String monitorId;
 
     private String data;
 
     public DataLine() {
     }
 
-    public DataLine(int formId, String data) {
-        this.formId = formId;
+    public DataLine(String monitorId, String data) {
+        this.monitorId = monitorId;
         this.data = data;
     }
 
-    public int getFormId() {
-        return formId;
+    public String getMonitorId() {
+        return monitorId;
     }
 
-    public void setFormId(int formId) {
-        this.formId = formId;
+    public void setMonitorId(String monitorId) {
+        this.monitorId = monitorId;
     }
 
     public String getData() {
@@ -33,8 +33,8 @@ public class DataLine {
     @Override
     public String toString() {
         return "{" +
-                "\"formId\":" + formId +
-                ", \"data\":\"" + data + '\"' +
+                "\"monitorId\":\"" + monitorId +
+                "\", \"data\":\"" + data + '\"' +
                 '}';
     }
 }

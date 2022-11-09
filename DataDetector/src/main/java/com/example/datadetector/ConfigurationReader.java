@@ -22,14 +22,7 @@ public class ConfigurationReader {
             String line = " ";
             String[] tempArr;
             while ((line = br.readLine()) != null) {
-//                System.out.println(line);
                 result.add(line);
-
-//                tempArr = line.split(delimiter);
-//                for (String tempStr : tempArr) {
-//                    System.out.print(tempStr + " ");
-//                }
-//                System.out.println();
             }
             br.close();
         } catch (IOException ioe) {

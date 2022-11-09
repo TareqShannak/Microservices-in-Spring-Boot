@@ -2,8 +2,6 @@ package com.example.common.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StringDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
@@ -12,7 +10,7 @@ import java.util.List;
 
 public class KafkaEvent {
 
-    private int formId;
+    private String mappingId;
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime creationTime;
@@ -22,18 +20,18 @@ public class KafkaEvent {
     public KafkaEvent() {
     }
 
-    public KafkaEvent(int formId, List<Attribute> attributes) {
-        this.formId = formId;
+    public KafkaEvent(String mappingId, List<Attribute> attributes) {
+        this.mappingId = mappingId;
         this.creationTime = LocalDateTime.now();
         this.attributes = attributes;
     }
 
-    public int getFormId() {
-        return formId;
+    public String getMappingId() {
+        return mappingId;
     }
 
-    public void setFormId(int formId) {
-        this.formId = formId;
+    public void setMappingId(String mappingId) {
+        this.mappingId = mappingId;
     }
 
     public LocalDateTime getCreationTime() {
@@ -55,8 +53,8 @@ public class KafkaEvent {
     @Override
     public String toString() {
         return "{" +
-                "\"formId\":" + formId +
-                ", \"creationTime\":\"" + creationTime +
+                "\"mappingId\":\"" + mappingId +
+                "\", \"creationTime\":\"" + creationTime +
                 "\", \"attributes\":" + attributes +
                 '}';
     }

@@ -4,14 +4,14 @@ public class DataFile {
 
     private String path;
 
-    private int formId;
+    private String monitorId;
 
     public DataFile() {
     }
 
-    public DataFile(String path, int formId) {
+    public DataFile(String path, String monitorId) {
         this.path = path;
-        this.formId = formId;
+        this.monitorId = monitorId;
     }
 
     public String getPath() {
@@ -22,19 +22,19 @@ public class DataFile {
         this.path = path;
     }
 
-    public int getFormId() {
-        return formId;
+    public String getMonitorId() {
+        return monitorId;
     }
 
-    public void setFormId(int formId) {
-        this.formId = formId;
+    public void setMonitorId(String monitorId) {
+        this.monitorId = monitorId;
     }
 
     @Override
     public String toString() {
         return "{" +
                 "\"path\":\"" + path + '\"' +
-                ", \"formId\":" + formId +
-                '}';
+                ", \"monitorId\":\"" + monitorId +
+                "\"}";
     }
 }

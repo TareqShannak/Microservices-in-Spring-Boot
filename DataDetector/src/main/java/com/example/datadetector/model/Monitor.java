@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,19 +29,20 @@ public class Monitor implements Runnable {
 
     private double checkTimeInMinutes;
 
-    private Timestamp startTime;
+    private LocalDateTime startTime;
 
     private List<IntegrationMapping> integrationMappings;
 
     public Monitor() {
+        this.startTime = LocalDateTime.now();
     }
 
-    public Monitor(int formId, String[] namingPolicy, String folderPath, double checkTimeInMinutes, Timestamp startTime, List<IntegrationMapping> integrationMappings) {
+    public Monitor(int formId, String[] namingPolicy, String folderPath, double checkTimeInMinutes, List<IntegrationMapping> integrationMappings) {
         this.formId = formId;
         this.namingPolicy = namingPolicy;
         this.folderPath = folderPath;
         this.checkTimeInMinutes = checkTimeInMinutes;
-        this.startTime = startTime;
+        this.startTime = LocalDateTime.now();
         this.integrationMappings = integrationMappings;
     }
 
@@ -84,12 +86,12 @@ public class Monitor implements Runnable {
         this.checkTimeInMinutes = checkTimeInMinutes;
     }
 
-    public Timestamp getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
-        this.startTime = new Timestamp(System.currentTimeMillis());
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = LocalDateTime.now();
     }
 
     public List<IntegrationMapping> getIntegrationMappings() {
@@ -115,7 +117,7 @@ public class Monitor implements Runnable {
                     for (String s : this.getNamingPolicy())
                         if (newFile.getName().matches(s)) {
                             System.out.println("New File!");
-                            KafkaListeners.kafkaTemplate.send("import-data", new DataFile(this.getFolderPath().replaceAll("\\\\", "\\\\\\\\") + "\\\\" + newFile.getName(), this.getFormId()).toString());
+                            KafkaListeners.kafkaTemplate.send("import-data", new DataFile(this.getFolderPath().replaceAll("\\\\", "\\\\\\\\") + "\\\\" + newFile.getName(), this.getId()).toString());
                             break;
                         }
                 }

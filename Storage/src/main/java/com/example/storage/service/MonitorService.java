@@ -1,9 +1,9 @@
-package com.example.datadetector.service;
+package com.example.storage.service;
 
-import com.example.datadetector.model.IntegrationMapping;
-import com.example.datadetector.model.Monitor;
-import com.example.datadetector.repo.IntegrationMappingRepository;
-import com.example.datadetector.repo.MonitorRepository;
+import com.example.storage.model.IntegrationMapping;
+import com.example.storage.model.Monitor;
+import com.example.storage.repo.IntegrationMappingRepository;
+import com.example.storage.repo.MonitorRepository;
 import org.springframework.stereotype.Service;
 @Service
 public class MonitorService {

@@ -1,4 +1,4 @@
-package com.example.datadetector.model;
+package com.example.jsonconverter.model;
 
 import com.example.common.model.Attribute;
 import org.springframework.data.annotation.Id;
@@ -8,7 +8,6 @@ import java.util.List;
 
 @Document
 public class IntegrationMapping {
-
     @Id
     private String id;
 

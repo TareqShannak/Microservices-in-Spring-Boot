@@ -1,4 +1,4 @@
-package com.example.datadetector.model;
+package com.example.storage.model;
 
 import com.example.common.model.Attribute;
 import org.springframework.data.annotation.Id;

@@ -1,10 +1,12 @@
-package com.example.datadetector.service;
+package com.example.jsonconverter.service;
 
-import com.example.datadetector.model.IntegrationMapping;
-import com.example.datadetector.model.Monitor;
-import com.example.datadetector.repo.IntegrationMappingRepository;
-import com.example.datadetector.repo.MonitorRepository;
+import com.example.jsonconverter.model.IntegrationMapping;
+import com.example.jsonconverter.model.Monitor;
+import com.example.jsonconverter.repo.IntegrationMappingRepository;
+import com.example.jsonconverter.repo.MonitorRepository;
 import org.springframework.stereotype.Service;
+
+
 @Service
 public class MonitorService {
 

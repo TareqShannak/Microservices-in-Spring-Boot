@@ -34,12 +34,10 @@ public class KafkaListeners {
             ArrayList<String> dataLines = fileReader.read(csvFile);
 
             for (String line : dataLines) {
-                DataLine dataLine = new DataLine(dataFile.getFormId(), line);
+                DataLine dataLine = new DataLine(dataFile.getMonitorId(), line);
                 System.out.println("FILE_READER ==> JSON_CONVERTER: " + dataLine);
                 kafkaTemplate.send("logs", dataLine.toString());
             }
-
-            //Thread.sleep(30_000);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

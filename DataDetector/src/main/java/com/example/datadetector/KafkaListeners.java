@@ -9,9 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -37,7 +35,8 @@ public class KafkaListeners {
     @KafkaListener(topics = "monitor-data", groupId = "uniqueGroup")
     void listener(String data) {
         try {
-            Monitor monitor = mapper.readValue(data, Monitor.class);
+            Monitor monitor = new Monitor();
+            monitor = mapper.readValue(data, Monitor.class);
             monitorService.saveMonitor(monitor);
 
             Path path = Paths.get(monitor.getFolderPath());

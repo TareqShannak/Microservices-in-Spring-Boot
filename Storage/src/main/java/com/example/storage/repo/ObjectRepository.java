@@ -14,6 +14,11 @@ public class ObjectRepository {
     private EntityManager entityManager;
 
     @Transactional
+    public void createQuery(String tableName, String columns) {
+        entityManager.createNativeQuery("CREATE TABLE IF NOT EXISTS " + tableName + " (" + columns + ")").executeUpdate();
+    }
+
+    @Transactional
     public void insertWithQuery(String tableName, String columns, String values) {
         entityManager.createNativeQuery("INSERT INTO " + tableName + "(" + columns + ") VALUES (" + values + ")").executeUpdate();
     }
