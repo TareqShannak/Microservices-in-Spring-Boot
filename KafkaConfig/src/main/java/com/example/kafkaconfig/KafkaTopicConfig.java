@@ -8,13 +8,24 @@ import org.springframework.kafka.config.TopicBuilder;
 @Configuration
 public class KafkaTopicConfig {
 
+
+    @Bean
+    public NewTopic monitorDataTopic() {
+        return TopicBuilder.name("monitor-data").build();
+    }
+
+    @Bean
+    public NewTopic importDataTopic() {
+        return TopicBuilder.name("import-data").build();
+    }
+
     @Bean
     public NewTopic tareqTopic() {
         return TopicBuilder.name("logs").build();
     }
 
     @Bean
-    public NewTopic dataTopic() {
-        return TopicBuilder.name("import-data").build();
+    public NewTopic jsonTopic() {
+        return TopicBuilder.name("json").build();
     }
 }

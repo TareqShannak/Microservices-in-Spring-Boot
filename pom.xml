@@ -5,6 +5,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>DataDetector</module>
+        <module>kafkaConfig</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

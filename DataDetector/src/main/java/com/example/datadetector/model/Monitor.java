@@ -111,12 +111,12 @@ public class Monitor implements Runnable {
     @Override
     public void run() {
         try {
-            System.out.println("New Monitor!");
+            System.out.println("New Monitor! ID: " + this.id);
             while (true) {
                 for (File newFile : listLastUpdatedFiles(new File(this.getFolderPath()), this.getCheckTimeInMinutes())) {
                     for (String s : this.getNamingPolicy())
                         if (newFile.getName().matches(s)) {
-                            System.out.println("New File!");
+                            System.out.println("New File Caught By Monitor with ID: " + this.id);
                             KafkaListeners.kafkaTemplate.send("import-data", new DataFile(this.getFolderPath().replaceAll("\\\\", "\\\\\\\\") + "\\\\" + newFile.getName(), this.getId()).toString());
                             break;
                         }

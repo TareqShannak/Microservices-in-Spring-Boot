@@ -13,13 +13,8 @@ public class ObjectService {
     @Autowired
     private ObjectRepository objectRepository;
 
-//    public void saveItem(int formId, String columns, String values) {
-//        objectRepository.insertWithQuery(Tables.values()[formId - 1].toString(), columns, values);
-//    }
-
     public void createTable(String tableName, List<Attribute> attributes){
 
-//        String columns = "id int8 not null, ";
         String columns = "id SERIAL PRIMARY KEY, ";
         for (Attribute attribute : attributes) {
             columns = columns.concat(attribute.getName() + " varchar(255), ");

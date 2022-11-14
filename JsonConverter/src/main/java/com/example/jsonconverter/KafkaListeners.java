@@ -8,12 +8,10 @@ import com.example.jsonconverter.model.Monitor;
 import com.example.jsonconverter.service.MonitorService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
-import org.w3c.dom.Attr;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +41,6 @@ public class KafkaListeners {
         String json = kafkaEvent.toString();
         System.out.println("JSON_CONVERTER ==> STORAGE: " + json);
         kafkaTemplate.send("json", json);
-
     }
 
     void convertToKafkaEvent(DataLine dataLine) {
