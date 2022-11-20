@@ -9,7 +9,6 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +28,8 @@ public class Monitor implements Runnable {
 
     private double checkTimeInMinutes;
 
+    private String dataDelimiter;
+
     private LocalDateTime startTime;
 
     private List<IntegrationMapping> integrationMappings;
@@ -37,12 +38,13 @@ public class Monitor implements Runnable {
         this.startTime = LocalDateTime.now();
     }
 
-    public Monitor(int formId, String[] namingPolicy, String folderPath, double checkTimeInMinutes, List<IntegrationMapping> integrationMappings) {
+    public Monitor(int formId, String[] namingPolicy, String folderPath, double checkTimeInMinutes, String dataDelimiter, List<IntegrationMapping> integrationMappings) {
         this.formId = formId;
         this.namingPolicy = namingPolicy;
         this.folderPath = folderPath;
         this.checkTimeInMinutes = checkTimeInMinutes;
         this.startTime = LocalDateTime.now();
+        this.dataDelimiter = dataDelimiter;
         this.integrationMappings = integrationMappings;
     }
 
@@ -86,6 +88,14 @@ public class Monitor implements Runnable {
         this.checkTimeInMinutes = checkTimeInMinutes;
     }
 
+    public String getDataDelimiter() {
+        return dataDelimiter;
+    }
+
+    public void setDataDelimiter(String dataDelimiter) {
+        this.dataDelimiter = dataDelimiter;
+    }
+
     public LocalDateTime getStartTime() {
         return startTime;
     }
@@ -104,9 +114,17 @@ public class Monitor implements Runnable {
 
     @Override
     public String toString() {
-        return "Monitor{" + "id=" + formId + ", namingPolicy=" + Arrays.toString(namingPolicy) + ", folderPath='" + folderPath + '\'' + ", checkTimeInMinutes=" + checkTimeInMinutes + ", startTime=" + startTime + '}';
+        return "Monitor{" +
+                "id='" + id + '\'' +
+                ", formId=" + formId +
+                ", namingPolicy=" + Arrays.toString(namingPolicy) +
+                ", folderPath='" + folderPath + '\'' +
+                ", checkTimeInMinutes=" + checkTimeInMinutes +
+                ", dataDelimiter='" + dataDelimiter + '\'' +
+                ", startTime=" + startTime +
+                ", integrationMappings=" + integrationMappings +
+                '}';
     }
-
 
     @Override
     public void run() {
@@ -117,6 +135,7 @@ public class Monitor implements Runnable {
                     for (String s : this.getNamingPolicy())
                         if (newFile.getName().matches(s)) {
                             System.out.println("New File Caught By Monitor with ID: " + this.id);
+                            System.out.println("DATA_DETECTOR ==> FILE_READER: " + new DataFile(this.getFolderPath().replaceAll("\\\\", "\\\\\\\\") + "\\\\" + newFile.getName(), this.getId()).toString());
                             KafkaListeners.kafkaTemplate.send("import-data", new DataFile(this.getFolderPath().replaceAll("\\\\", "\\\\\\\\") + "\\\\" + newFile.getName(), this.getId()).toString());
                             break;
                         }

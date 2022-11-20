@@ -34,7 +34,7 @@ public class DataFile {
     public String toString() {
         return "{" +
                 "\"path\":\"" + path + '\"' +
-                ", \"monitorId\":\"" + monitorId +
-                "\"}";
+                ", \"monitorId\":\"" + monitorId + '\"' +
+                "}";
     }
 }

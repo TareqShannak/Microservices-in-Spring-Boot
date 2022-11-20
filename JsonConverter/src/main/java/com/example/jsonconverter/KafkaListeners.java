@@ -37,24 +37,28 @@ public class KafkaListeners {
         ObjectMapper mapper = new ObjectMapper();
         DataLine dataLine = mapper.readValue(data, DataLine.class);
         convertToKafkaEvent(dataLine);
-
-        String json = kafkaEvent.toString();
-        System.out.println("JSON_CONVERTER ==> STORAGE: " + json);
-        kafkaTemplate.send("json", json);
     }
 
     void convertToKafkaEvent(DataLine dataLine) {
 
-        tokens = dataLine.getData().split(",");
         List<Attribute> attributes = new ArrayList<>();
 
         Monitor currentMonitor = monitorService.getMonitorById(dataLine.getMonitorId());
+        tokens = dataLine.getData().split(currentMonitor.getDataDelimiter());
+
         for (IntegrationMapping integrationMapping : currentMonitor.getIntegrationMappings()) {
+            if(getOccurrencesOfChar(dataLine.getData(), currentMonitor.getDataDelimiter()) + 1 != integrationMapping.getTranslationMapping().size()){
+                System.out.println("Wrong Format for Data");
+                continue;
+            }
             AtomicInteger count = new AtomicInteger();
             for (String token : tokens)
                 attributes.add(new Attribute(findUsingIndex(String.valueOf(count.getAndIncrement()),
                         integrationMapping.getTranslationMapping()).getName(), token));
             kafkaEvent = new KafkaEvent(integrationMapping.getId(), attributes);
+            String json = kafkaEvent.toString();
+            System.out.println("JSON_CONVERTER ==> STORAGE: " + json);
+            kafkaTemplate.send("json", json);
         }
     }
 
@@ -66,6 +70,18 @@ public class KafkaListeners {
             }
         }
         return null;
+    }
+
+    public int getOccurrencesOfChar(String sentence, String characters){
+        int count = 0;
+
+        for (int i = 0; i < sentence.length(); i++) {
+            if (characters.contains(String.valueOf(sentence.charAt(i)))) {
+                count++;
+            }
+        }
+
+        return count;
     }
 }
 

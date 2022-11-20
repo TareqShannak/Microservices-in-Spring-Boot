@@ -25,6 +25,8 @@ public class Monitor {
 
     private double checkTimeInMinutes;
 
+    private String dataDelimiter;
+
     private LocalDateTime startTime;
 
     private List<IntegrationMapping> integrationMappings;
@@ -32,11 +34,12 @@ public class Monitor {
     public Monitor() {
     }
 
-    public Monitor(int formId, String[] namingPolicy, String folderPath, double checkTimeInMinutes, LocalDateTime startTime, List<IntegrationMapping> integrationMappings) {
+    public Monitor(int formId, String[] namingPolicy, String folderPath, double checkTimeInMinutes, String dataDelimiter, LocalDateTime startTime, List<IntegrationMapping> integrationMappings) {
         this.formId = formId;
         this.namingPolicy = namingPolicy;
         this.folderPath = folderPath;
         this.checkTimeInMinutes = checkTimeInMinutes;
+        this.dataDelimiter = dataDelimiter;
         this.startTime = startTime;
         this.integrationMappings = integrationMappings;
     }
@@ -81,6 +84,14 @@ public class Monitor {
         this.checkTimeInMinutes = checkTimeInMinutes;
     }
 
+    public String getDataDelimiter() {
+        return dataDelimiter;
+    }
+
+    public void setDataDelimiter(String dataDelimiter) {
+        this.dataDelimiter = dataDelimiter;
+    }
+
     public LocalDateTime getStartTime() {
         return startTime;
     }
@@ -99,7 +110,15 @@ public class Monitor {
 
     @Override
     public String toString() {
-        return "Monitor{" + "formId=" + formId + ", namingPolicy=" + Arrays.toString(namingPolicy) + ", folderPath='" + folderPath + '\'' + ", checkTimeInMinutes=" + checkTimeInMinutes + ", startTime=" + startTime + '}';
+        return "Monitor{" +
+                "id='" + id + '\'' +
+                ", formId=" + formId +
+                ", namingPolicy=" + Arrays.toString(namingPolicy) +
+                ", folderPath='" + folderPath + '\'' +
+                ", checkTimeInMinutes=" + checkTimeInMinutes +
+                ", dataDelimiter='" + dataDelimiter + '\'' +
+                ", startTime=" + startTime +
+                ", integrationMappings=" + integrationMappings +
+                '}';
     }
-
 }

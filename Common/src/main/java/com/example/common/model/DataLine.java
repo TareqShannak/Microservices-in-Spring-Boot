@@ -1,5 +1,7 @@
 package com.example.common.model;
 
+import com.google.gson.Gson;
+
 public class DataLine {
 
     private String monitorId;
@@ -32,9 +34,10 @@ public class DataLine {
 
     @Override
     public String toString() {
-        return "{" +
-                "\"monitorId\":\"" + monitorId +
-                "\", \"data\":\"" + data + '\"' +
-                '}';
+//        return "{" +
+//                "\"monitorId\":\"" + monitorId + '\"' +
+//                ", \"data\":\"" + data + '\"' +
+//                '}';
+        return new Gson().toJson(this) ;
     }
 }

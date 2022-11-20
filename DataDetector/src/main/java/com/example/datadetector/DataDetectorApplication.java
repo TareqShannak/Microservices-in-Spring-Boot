@@ -44,7 +44,7 @@ public class DataDetectorApplication {
             System.out.println("Data Read From Configuration File: " + events);
 
             for (String event : events){
-                Thread.sleep(3_000);
+                Thread.sleep(1_000);
                 kafkaTemplate.send("monitor-data", event);
             }
         };

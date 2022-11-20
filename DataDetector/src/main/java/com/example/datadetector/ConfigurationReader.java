@@ -11,8 +11,6 @@ import java.util.ArrayList;
 @Component
 public class ConfigurationReader {
 
-    public static final String delimiter = ",";
-
     public static ArrayList<String> read(String filePath) {
         ArrayList<String> result = new ArrayList<>();
         try {
@@ -20,7 +18,6 @@ public class ConfigurationReader {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
             String line = " ";
-            String[] tempArr;
             while ((line = br.readLine()) != null) {
                 result.add(line);
             }
