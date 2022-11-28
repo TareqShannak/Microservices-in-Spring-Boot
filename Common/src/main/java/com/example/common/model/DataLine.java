@@ -34,10 +34,6 @@ public class DataLine {
 
     @Override
     public String toString() {
-//        return "{" +
-//                "\"monitorId\":\"" + monitorId + '\"' +
-//                ", \"data\":\"" + data + '\"' +
-//                '}';
         return new Gson().toJson(this) ;
     }
 }
